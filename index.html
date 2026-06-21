@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XgXgXg.OSINT</title>
+<style>
+body { background: #0a0a0a; color: #00ff88; font-family: monospace; padding: 20px; }
+.container { max-width: 800px; margin: 0 auto; border: 1px solid #00ff88; padding: 30px; border-radius: 10px; }
+h1 { color: #ff4444; text-align: center; text-shadow: 0 0 10px #ff4444; }
+.sub { color: #ff8800; text-align: center; }
+input { width: 70%; padding: 10px; background: #111; color: #00ff88; border: 1px solid #00ff88; border-radius: 5px; font-size: 16px; }
+button { background: #00ff88; color: #0a0a0a; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+button:hover { background: #00cc66; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+.grid-item { background: #111; border: 1px solid #00ff88; padding: 10px; text-align: center; border-radius: 5px; color: #00ff88; font-size: 12px; cursor: pointer; }
+.grid-item:hover { background: #00ff88; color: #0a0a0a; }
+.output { margin-top: 20px; padding: 15px; background: #111; border-radius: 5px; white-space: pre-wrap; font-size: 14px; max-height: 400px; overflow-y: auto; }
+.log { color: #aaaaaa; }
+.success { color: #00ff88; }
+.final { color: #ffaa00; font-weight: bold; }
+.error { color: #ff4444; }
+.matrix { color: #00ff88; text-shadow: 0 0 5px #00ff88; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🔓 XgXgXg.OSINT</h1>
+<p class="sub">[ Skid ]</p>
+<div class="grid">
+<div class="grid-item" data-mode="scanner">Scanner</div>
+<div class="grid-item" data-mode="password">Password</div>
+<div class="grid-item" data-mode="cookie">Cookie</div>
+<div class="grid-item" data-mode="session">Session</div>
+<div class="grid-item" data-mode="ip">IP</div>
+<div class="grid-item" data-mode="breacher">Breacher</div>
+</div>
+<input type="text" id="targetInput" placeholder="TARGET (username or service)..." autofocus>
+<button id="hackBtn">▶ EXECUTE BREACH</button>
+<button id="clearBtn" style="background:#444;color:#fff;">✕ CLEAR</button>
+<div id="progress"><div id="progress-bar"></div></div>
+<div class="output" id="output">AWAITING TARGET...</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('targetInput');
+    const hackBtn = document.getElementById('hackBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const output = document.getElementById('output');
+    const progress = document.getElementById('progress');
+    const progressBar = document.getElementById('progress-bar');
+
+    let currentMode = 'scanner';
+
+    // Updated password lengths: 8,10,9,21,12,13,17
+    const PASSWORD_LENGTHS = [8, 10, 9, 21, 12, 13, 17];
+    const COOKIE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+
+    function generateRandomString(length, charSet) {
+        let result = '';
+        for (let i = 0; i < length; i++) {
+            result += charSet[Math.floor(Math.random() * charSet.length)];
+        }
+        return result;
+    }
+
+    function generatePassword() {
+        const len = PASSWORD_LENGTHS[Math.floor(Math.random() * PASSWORD_LENGTHS.length)];
+        return generateRandomString(len, COOKIE_CHARS + '@#$&_-+()/*"\'":;!?');
+    }
+
+    function generateROBLOSECURITY() {
+        const len = 40 + Math.floor(Math.random() * 40);
+        return generateRandomString(len, COOKIE_CHARS);
+    }
+
+    function generateOutput(target, mode) {
+        const cleanTarget = target.trim().toUpperCase();
+        const outputs = [];
+        outputs.push(`[+] TARGET: ${cleanTarget}`);
+
+        if (mode === 'scanner' || mode === 'breacher') {
+            outputs.push(`[+] USER ID: ${Math.floor(Math.random() * 1000000000)}`);
+            outputs.push(`[+] IP ADDRESS: ${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`);
+            outputs.push(`[+] EMAIL: ${cleanTarget.toLowerCase()}@${cleanTarget.toLowerCase()}.com`);
+        }
+
+        if (mode === 'password' || mode === 'breacher') {
+            outputs.push(`[+] PASSWORD: ${generatePassword()}`);
+        }
+        if (mode === 'cookie' || mode === 'breacher' || mode === 'scanner') {
+            outputs.push(`[+] .ROBLOSECURITY: ${generateROBLOSECURITY()}`);
+        }
+        if (mode === 'session' || mode === 'breacher' || mode === 'scanner') {
+            outputs.push(`[+] SESSION TOKEN: ${generateRandomString(32, COOKIE_CHARS)}`);
+        }
+        if (mode === 'ip') {
+            outputs.push(`[+] IP ADDRESS: ${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`);
+        }
+
+        outputs.push(`[+] STATUS: ACCESS GRANTED`);
+
+        if (mode === 'password' || mode === 'breacher') {
+            outputs.push(`[+] FINAL PASSWORD: ${generatePassword()}`);
+        }
+        return outputs.join('\n');
+    }
+
+    function simulateBreach(target, mode) {
+        return new Promise((resolve) => {
+            const cleanTarget = target.trim().toUpperCase();
+            let steps = [];
+            if (mode === 'scanner') {
+                steps = [
+                    '[+] SCANNING: ' + cleanTarget,
+                    '[+] ENUMERATING OPEN PORTS...',
+                    '[+] DETECTING SERVICES...',
+                    '[+] GRABBING BANNERS...',
+                    '[+] COMPILING FULL REPORT...'
+                ];
+            } else if (mode === 'password') {
+                steps = [
+                    '[+] TARGETING: ' + cleanTarget,
+                    '[+] EXTRACTING HASHES...',
+                    '[+] BRUTE FORCING WITH GPU...',
+                    '[+] DECRYPTING PASSWORD...'
+                ];
+            } else if (mode === 'cookie') {
+                steps = [
+                    '[+] TARGETING: ' + cleanTarget,
+                    '[+] INTERCEPTING SESSION...',
+                    '[+] DUMPING COOKIES...'
+                ];
+            } else if (mode === 'session') {
+                steps = [
+                    '[+] TARGETING: ' + cleanTarget,
+                    '[+] STEALING SESSION TOKEN...'
+                ];
+            } else if (mode === 'ip') {
+                steps = [
+                    '[+] TARGETING: ' + cleanTarget,
+                    '[+] RESOLVING IP ADDRESS...'
+                ];
+            } else { // breacher
+                steps = [
+                    '[+] TARGETING: ' + cleanTarget,
+                    '[+] BYPASSING SECURITY...',
+                    '[+] DUMPING ALL CREDENTIALS...'
+                ];
+            }
+
+            let stepIndex = 0;
+            const interval = setInterval(() => {
+                if (stepIndex < steps.length) {
+                    output.innerHTML = steps[stepIndex] + '\n[=] PROGRESS: ' + Math.round((stepIndex+1)/steps.length*100) + '%';
+                    progressBar.style.width = ((stepIndex + 1) / steps.length * 100) + '%';
+                    stepIndex++;
+                } else {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, 350);
+        });
+    }
+
+    async function runHack() {
+        const target = input.value.trim();
+        if (!target) {
+            output.innerHTML = '<span class="error">[!] TARGET REQUIRED</span>';
+            return;
+        }
+
+        output.innerHTML = '';
+        progress.style.display = 'block';
+        progressBar.style.width = '0%';
+        hackBtn.disabled = true;
+
+        await simulateBreach(target, currentMode);
+
+        const hackerData = generateOutput(target, currentMode);
+
+        let header = '[+] HACK SUCCESSFUL';
+        if (currentMode === 'scanner') header = '[+] SCAN COMPLETE';
+        else if (currentMode === 'password') header = '[+] PASSWORD CRACKED';
+        else if (currentMode === 'cookie') header = '[+] COOKIE EXTRACTED';
+        else if (currentMode === 'session') header = '[+] SESSION STOLEN';
+        else if (currentMode === 'ip') header = '[+] IP RESOLVED';
+        else header = '[+] BREACH COMPLETE';
+
+        output.innerHTML = `<span class="success">${header}</span>\n` +
+                           `<span class="log">${hackerData}</span>`;
+
+        progress.style.display = 'none';
+        hackBtn.disabled = false;
+    }
+
+    hackBtn.addEventListener('click', runHack);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') runHack(); });
+
+    clearBtn.addEventListener('click', function() {
+        input.value = '';
+        output.innerHTML = 'AWAITING TARGET...';
+        progress.style.display = 'none';
+        progressBar.style.width = '0%';
+        input.focus();
+    });
+
+    document.querySelectorAll('.grid-item').forEach(item => {
+        item.addEventListener('click', function() {
+            currentMode = this.dataset.mode;
+            input.value = this.textContent.trim();
+            output.innerHTML = 'AWAITING TARGET...';
+            progress.style.display = 'none';
+            progressBar.style.width = '0%';
+            input.focus();
+        });
+    });
+
+    input.focus();
+});
+</script>
+</body>
+</html>
